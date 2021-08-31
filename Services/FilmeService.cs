@@ -77,7 +77,7 @@ namespace catalogo_api.Services
         {
             var entityFilme = await _filmeRepository.Get(filme.Diretor, filme.Titulo);
 
-            if (entityFilme == null)
+            if (entityFilme.Count > 0)
             {
                 throw new ArgumentNullException();
             }
