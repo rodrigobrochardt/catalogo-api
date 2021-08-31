@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace catalogo_api.Services
 {
-    public interface IFilmeService
+    public interface IFilmeService : IDisposable
     {
         Task<List<FilmeViewModel>> Get(int pagina, int quantidade);
         Task<FilmeViewModel> Get(Guid id);
