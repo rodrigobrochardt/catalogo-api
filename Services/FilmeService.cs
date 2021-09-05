@@ -1,4 +1,5 @@
 ﻿using catalogo_api.Entities;
+using catalogo_api.Exceptions;
 using catalogo_api.InputModel;
 using catalogo_api.Repositories;
 using catalogo_api.ViewModel;
@@ -23,7 +24,7 @@ namespace catalogo_api.Services
             var filme = await _filmeRepository.Get(id);
             if (filme == null)
             {
-                throw new ArgumentNullException();
+                throw new FilmeNaoCadastradoException();
             }
             await _filmeRepository.Delete(id);
         }
@@ -62,13 +63,29 @@ namespace catalogo_api.Services
             };
         }
 
-        public async Task Patch(Guid id, double valor)
+        public async Task<List<FilmeViewModel>> Get(string diretor)
+        {
+            var filmes = await _filmeRepository.Get(diretor);
+            if (filmes == null)
+            {
+                return null;
+            }
+            return filmes.Select(filme => new FilmeViewModel
+            {
+                Id = filme.Id,
+                Diretor = filme.Diretor,
+                Titulo = filme.Titulo,
+                Valor = filme.Valor
+            }).ToList();
+        }
+
+        public async Task Patch(Guid id, decimal valor)
         {
             var filme = await _filmeRepository.Get(id);
 
             if (filme == null)
             {
-                throw new ArgumentNullException();
+                throw new FilmeNaoCadastradoException();
             }
             await _filmeRepository.Patch(id, valor);
         }
@@ -79,7 +96,7 @@ namespace catalogo_api.Services
 
             if (entityFilme.Count > 0)
             {
-                throw new ArgumentNullException();
+                throw new FilmeJaCadastradoException();
             }
             var newFilme = new Filme
             {
@@ -103,7 +120,7 @@ namespace catalogo_api.Services
             var entityFilme = await _filmeRepository.Get(id);
             if (entityFilme == null)
             {
-                throw new ArgumentNullException();
+                throw new FilmeNaoCadastradoException();
             }
             entityFilme.Titulo = filme.Titulo;
             entityFilme.Valor = filme.Valor;

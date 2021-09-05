@@ -18,6 +18,6 @@ namespace catalogo_api.InputModel
 
         [Required]
         [Range(1,5000,ErrorMessage ="O Valor do filme deve ser entre 1 e 5000 reais")]
-        public double Valor { get; set; }
+        public decimal Valor { get; set; }
     }
 }

@@ -33,6 +33,18 @@ namespace catalogo_api.Controllers.V1
 
             return Ok(result);
         }
+        //get all objects by diretor
+        [HttpGet("{diretor}")]
+        public async Task<ActionResult<List<FilmeViewModel>>> Get([FromRoute, StringLength(maximumLength: 100, MinimumLength = 4)] string diretor)
+        {
+            var result = await _filmeService.Get(diretor);
+            if (result.Count == 0)
+            {
+                return NoContent();
+            }
+
+            return Ok(result);
+        }
         //get an object
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<FilmeViewModel>> Get([FromRoute] Guid id)
@@ -42,7 +54,7 @@ namespace catalogo_api.Controllers.V1
             {
                 return NoContent();
             }
-            return Ok();
+            return Ok(filme);
         }
         //new object
         [HttpPost]
@@ -75,8 +87,8 @@ namespace catalogo_api.Controllers.V1
             }
         }
         //update an attribute
-        [HttpPatch("{id:guid}/price/{price:double}")]
-        public async Task<ActionResult> Patch([FromRoute]Guid id,[FromRoute] double valor)
+        [HttpPatch("{id:guid}/{valor:decimal}")]
+        public async Task<ActionResult> Patch([FromRoute]Guid id,[FromRoute] decimal valor)
         {
             try
             {
